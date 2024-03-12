@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karinderya</title>
+
+    <style>
+        .choices-container, .pay {
+            padding: 20px;
+        }
+
+        .quantity {
+            padding-top: 10px ;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Welcome to the canteen! Here are our street foods menu.</h1>
+        <h2>Pices are shown below. Click Finalize order button once you're sure with your orders.</h2>
+        <div class="street-foods">
+            <ul>
+                <li>Burgers - ₱60</li>
+                <li>Fries - ₱50</li>
+                <li>Fishball - ₱20</li>
+                <li>Kikiam - ₱20</li>
+            </ul>
+
+            <button type="button" onclick="addFoodItem()">Add a food item</button>
+
+            <div class="choices-container">
+                <div class="order">
+                    <div class="choices">
+                        <form>
+                            <label for="street-foods">Choice:</label>
+                            <select name="street-foods" id="street-foods">
+                                <option value="burger">Burger</option>
+                                <option value="fries">Fries</option>
+                                <option value="fishball">Fishball</option>
+                                <option value="kikiam">Kikiam</option>
+                            </select>
+                        </form>
+                    </div>
+    
+                    <div class="quantity">
+                        <label for="quantity">Quantity:</label>
+                        <input type="text" id="quantity" name="">
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="finalize-order">
+                <button type="button" onclick="finalizeOrder()">Finalize Order</button>
+            </div>
+
+            <div class="pay" id="pay">
+                <form>
+                    <label for="cash">Cash:</label>
+                    <input type="text" id="cash" name="cash">
+                    <button type="submit" onclick="calculateChange()">Pay</button>
+                </form>
+                <p id="change"></p>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        let choicesContainer = document.querySelector('.choices-container');
+        let totalCost = 0;
+
+        function addFoodItem() {
+            const foodSelect = document.createElement("select");
+            foodSelect.name = "street-foods";
+            foodSelect.id = "street-foods";
+
+            const foodOptions = ['burger', 'fries', 'fishball', 'kikiam'];
+
+            foodOptions.forEach(option => {
+                const newOption = document.createElement("option");
+                newOption.value = option;
+                newOption.textContent = option[0].toUpperCase() + option.slice(1);
+                foodSelect.appendChild(newOption);
+            });
+
+            const quantityInput = document.createElement("input");
+            quantityInput.type = "text";
+            quantityInput.id = "quantity";
+            quantityInput.name = "";
+
+            const labelChoice = document.createElement("label");
+            labelChoice.htmlFor = "street-foods";
+            labelChoice.textContent = "Choice: ";
+
+            const labelQuantity = document.createElement("label");
+            labelQuantity.htmlFor = "quantity";
+            labelQuantity.textContent = "Quantity: ";
+
+            const newChoice = document.createElement("div");
+            newChoice.className = "choices";
+            newChoice.appendChild(labelChoice);
+            newChoice.appendChild(foodSelect);
+
+            const newQuantity = document.createElement("div");
+            newQuantity.className = "quantity";
+            newQuantity.appendChild(labelQuantity);
+            newQuantity.appendChild(quantityInput);
+
+            choicesContainer.appendChild(newChoice);
+            choicesContainer.appendChild(newQuantity);
+        }
+
+        function finalizeOrder() {
+            let selectedFoods = document.querySelectorAll('.choices select');
+            let quantities = document.querySelectorAll('.quantity input');
+            totalCost = 0;
+
+            selectedFoods.forEach((food, index) => {
+                if (food.value && quantities[index].value > 0) {
+                    const price = {
+                        burger: 60,
+                        fries: 50,
+                        fishball: 20,
+                        kikiam: 20
+                    }[food.value];
+
+                    const quantity = parseInt(quantities[index].value);
+                    totalCost += price * quantity;
+                }
+            });
+
+            alert(`Total cost: ₱${totalCost}`);
+        }
+
+        function calculateChange() {
+            const cashInput = document.getElementById("cash");
+            const cash = parseFloat(cashInput.value);
+
+            if (cash >= totalCost) {
+                const change = cash - totalCost;
+                document.getElementById("change").textContent = alert(`Change: ₱${change}`);
+            } else {
+                alert("Insufficient cash.");
+            }
+        }
+    </script>
+</body>
+</html>
